@@ -1,0 +1,31 @@
+name: Run OS31 R7.2 2019-2026 Backtest
+
+on:
+  workflow_dispatch:
+
+jobs:
+  backtest:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: |
+          pip install -r requirements.txt
+
+      - name: Run backtest
+        run: |
+          python os31_r72_2019_2026_backtest.py --start 2019-01-01 --end 2026-12-31 --initial-capital 5000000 --tolerance 0.05 --fee-bps 0
+
+      - name: Upload output
+        uses: actions/upload-artifact@v4
+        with:
+          name: os31-r72-2019-2026-output
+          path: output/
